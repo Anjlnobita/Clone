@@ -100,40 +100,52 @@ def stream_markup_timer(_, videoid, chat_id, played, dur):
     return buttons
 
 
-def stream_markup(_, videoid, chat_id):
-    buttons = [
-        [
-            InlineKeyboardButton(
-                text=_["S_B_5"],
-                url=f"https://t.me/{app.username}?startgroup=true",
-            ),
-        ],
-        [
-            InlineKeyboardButton(
-                text="❍ 𝐏ʟᴀʏʟɪ𝐬ᴛ ❍", callback_data=f"shukla_playlist {videoid}"
-            ),
-            InlineKeyboardButton(
-                text="❍ 𝐂ᴏɴᴛʀᴏʟ ❍",
-                callback_data=f"Pages Back|3|{videoid}|{chat_id}",
-            ),
-        ],
-        [
-            InlineKeyboardButton(
-                text="❍ 𝐔ᴘᴅᴀᴛᴇ ❍", url=f"https://t.me/UR_RISHU_143"
-            ),
-            InlineKeyboardButton(
-                text="❍ 𝐒ᴜᴘᴘᴏʀᴛ ❍", url=f"https://t.me/Ur_support07"
-            ),
-        ],
-        [
-            InlineKeyboardButton(
-                text="❍ 𝐀ᴅᴠᴀɴᴄᴇ ❍",
-                callback_data=f"Pages Forw|0|{videoid}|{chat_id}",
-            ),
-        ],
-    ]
 
+def stream_markup(_, videoid, chat_id, played, dur):
+    played_sec = time_to_seconds(played)
+    duration_sec = time_to_seconds(dur)
+    percentage = (played_sec / duration_sec) * 100
+    umm = math.floor(percentage)
+    if 0 < umm <= 10:
+        bar = "❖◈◈◈◈◈◈◈◈◈"
+    elif 10 < umm < 20:
+        bar = "◈❖◈◈◈◈◈◈◈◈"
+    elif 20 <= umm < 30:
+        bar = "◈◈❖◈◈◈◈◈◈◈"
+    elif 30 <= umm < 40:
+        bar = "◈◈◈❖◈◈◈◈◈◈"
+    elif 40 <= umm < 50:
+        bar = "◈◈◈◈❖◈◈◈◈◈"
+    elif 50 <= umm < 60:
+        bar = "◈◈◈◈◈❖◈◈◈◈"
+    elif 60 <= umm < 70:
+        bar = "◈◈◈◈◈◈❖◈◈◈"
+    elif 70 <= umm < 80:
+        bar = "◈◈◈◈◈◈◈❖◈◈"
+    elif 80 <= umm < 95:
+        bar = "◈◈◈◈◈◈◈◈❖◈"
+    else:
+        bar = "◈◈◈◈◈◈◈◈◈❖"
+    buttons = [   
+            [
+                   InlineKeyboardButton(
+                text=f"{played} {bar} {dur}",
+                callback_data="GetTimer"
+                )
+         ],
+         [
+            InlineKeyboardButton(text="ᴘᴀᴜsᴇ", callback_data=f"ADMIN Pause|{chat_id}"),
+            InlineKeyboardButton(text="ʀᴇsᴜᴍᴇ", callback_data=f"ADMIN Resume|{chat_id}"),
+            InlineKeyboardButton(text="sᴋɪᴘ", callback_data=f"ADMIN Skip|{chat_id}")
+        ],
+        [
+            InlineKeyboardButton(text="sᴛᴏᴘ", callback_data=f"ADMIN Stop|{chat_id}"),
+            InlineKeyboardButton(text="ʀᴇᴘʟᴀʏ", callback_data=f"ADMIN Replay|{chat_id}"),
+        ],
+        [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")],
+    ]
     return buttons
+        
 
 
 def playlist_markup(_, videoid, user_id, ptype, channel, fplay):
